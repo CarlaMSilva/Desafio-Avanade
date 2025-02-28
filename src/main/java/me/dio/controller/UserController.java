@@ -79,4 +79,24 @@ public record UserController(UserService userService) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @GetMapping("/search")
+    @Operation(summary = "Search users by name or email", description = "Retrieve users filtered by name, email, or both")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Operation successful"),
+            @ApiResponse(responseCode = "404", description = "No users found")
+    })
+    public ResponseEntity<List<UserDto>> searchUsers(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String email) {
+
+        var users = userService.searchUsers(name, email);
+
+        if (users.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var usersDto = users.stream().map(UserDto::new).collect(Collectors.toList());
+        return ResponseEntity.ok(usersDto);
+    }
+
 }

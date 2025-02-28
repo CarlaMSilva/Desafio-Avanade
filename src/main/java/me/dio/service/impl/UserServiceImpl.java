@@ -82,5 +82,10 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException("User with ID %d can not be %s.".formatted(UNCHANGEABLE_USER_ID, operation));
         }
     }
+
+    @Override
+    public List<User> searchUsers(String name, String email) {
+        return null;
+    }
 }
 
